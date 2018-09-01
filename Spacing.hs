@@ -30,20 +30,20 @@ module Spacing where
       newEndY = (snd . bottomRight) sec2 + height sec1
 
   above :: Section a -> Section a -> Section a
-  above sec1 sec2 = sec1
+  above sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
     where
       newStartX = (fst . topLeft) sec2
-      newStartY = (snd . topLeft) sec2 + height sec2
+      newStartY = (snd . topLeft) sec2 - height sec1
       newEndX = (fst . bottomRight) sec2
-      newEndY = (snd . bottomRight) sec2 + height sec1
+      newEndY = (snd . bottomRight) sec2 - height sec2
   
   besideR :: Section a -> Section a -> Section a
   besideR sec1 sec2 = sec1
     where
-      newStartX = (fst . topLeft) sec2
-      newStartY = (snd . topLeft) sec2 + height sec2
-      newEndX = (fst . bottomRight) sec2
-      newEndY = (snd . bottomRight) sec2 + height sec1
+      newStartX = (fst . topLeft) sec2 + width sec2
+      newStartY = (snd . topLeft) sec2
+      newEndX = (fst . bottomRight) sec2 + width sec1
+      newEndY = (snd . bottomRight) sec2
 
   besideL :: Section a -> Section a -> Section a
   besideL sec1 sec2 = sec1
@@ -76,6 +76,7 @@ module Spacing where
       newStartY = (snd . topLeft) sec2 + height sec2
       newEndX = (fst . bottomRight) sec2
       newEndY = (snd . bottomRight) sec2 + height sec1
+      
   besideLN :: Section a -> Int -> Section a -> Section a
   besideLN sec1 n sec2 = sec1
     where
