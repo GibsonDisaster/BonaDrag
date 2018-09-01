@@ -43,13 +43,10 @@ module Spacing where
     where
       newStartX = (fst . topLeft) sec2 + width sec2
       newStartY = (snd . topLeft) sec2
-<<<<<<< HEAD
       newEndX = newStartX + width sec1
       newEndY = newStartY + height sec1
-=======
       newEndX = (fst . bottomRight) sec2 + width sec1
       newEndY = (snd . bottomRight) sec2
->>>>>>> 78b000fed2c7bb9f8f811432f1a4b82713bd13d3
 
   besideL :: Section a -> Section a -> Section a
   besideL sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
@@ -76,16 +73,9 @@ module Spacing where
   besideRN :: Section a -> Int -> Section a -> Section a
   besideRN sec1 n sec2 = movetoRight { topLeft = bimap ((+) n) id newStart, bottomRight = bimap ((+) n) id newEnd }
     where
-<<<<<<< HEAD
       movetoRight = sec1 `besideR` sec2
       newStart = topLeft movetoRight
       newEnd = bottomRight movetoRight
-=======
-      newStartX = (fst . topLeft) sec2
-      newStartY = (snd . topLeft) sec2 + height sec2
-      newEndX = (fst . bottomRight) sec2
-      newEndY = (snd . bottomRight) sec2 + height sec1
->>>>>>> 78b000fed2c7bb9f8f811432f1a4b82713bd13d3
       
   besideLN :: Section a -> Int -> Section a -> Section a
   besideLN sec1 n sec2 = movetoLeft { topLeft = bimap (\y -> y - n) id newStart, bottomRight = bimap (\y -> y - n) id newEnd }
