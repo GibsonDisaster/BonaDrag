@@ -18,5 +18,14 @@ module Types where
     sections :: [Section a]
   }
 
+  data Spec a = Spec {
+    sName :: String,
+    sWidth :: Int,
+    sHeight :: Int,
+    sState :: a,
+    sDraw :: (Section a -> IO ()),
+    sUpdate :: (Section a -> Section a)
+  }
+
   instance Show (Section a) where
     show (Section i _ _ s e _ _ _) = i ++ " from " ++ show s ++ " to " ++ show e

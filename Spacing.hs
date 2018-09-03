@@ -83,3 +83,32 @@ module Spacing where
       movetoLeft = sec1 `besideL` sec2
       newStart = topLeft movetoLeft
       newEnd = bottomRight movetoLeft
+
+  {-
+    LEAN FUNCTIONS
+    used to specify preference for positioning in a certain axis
+  -}
+
+  leanL :: Section a -> Section a -> Section a
+  leanL sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+    where
+      newStart = bimap (\x -> x - (width sec2)) id (topLeft sec1)
+      newEnd = bimap (\x -> x - (width sec2)) id (bottomRight sec1)
+
+  leanR :: Section a -> Section a -> Section a
+  leanR sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+    where
+      newStart = bimap ((+) (width sec2)) id (topLeft sec1)
+      newEnd = bimap ((+) (width sec2)) id (bottomRight sec1)
+
+  leanU :: Section a -> Section a -> Section a
+  leanU sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+    where
+      newStart = bimap id (\x -> x - (width sec2)) (topLeft sec1)
+      newEnd = bimap id (\x -> x - (width sec2)) (bottomRight sec1)
+
+  leanD :: Section a -> Section a -> Section a
+  leanD sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+    where
+      newStart = bimap id ((+) (width sec2)) (topLeft sec1)
+      newEnd = bimap id ((+) (width sec2)) (bottomRight sec1)

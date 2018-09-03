@@ -4,6 +4,11 @@ module Utilities where
   scale :: Int
   scale = 1
 
+  createSection :: Spec -> Section
+  createSection sp sec = Section {
+    id = (sId sp)
+  }
+
   outlineFromCorners :: Pos -> Pos -> [Pos]
   outlineFromCorners (x, y) (m, n) = top ++ bottom ++ left ++ right
     where
