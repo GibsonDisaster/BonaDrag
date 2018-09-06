@@ -12,11 +12,13 @@ module Display(runWindow) where
   TODO 
   1) Flow of application (StateT, FRP, etc)
   2) correct drawing of the window
-  3) abstrac the positioning of windows with stuff like win1 `below` win2 `besideR` win3 etc
+  3) abstract the positioning of windows with stuff like win1 `below` win2 `besideR` win3 etc
   4) abstract everything
   5) why do some topLeft bottomRights not matter like when the section isn't a root. CHANGE THIS
+  6) way of composing all the sections together into a window
   -}
 
+  -- Only for use with Windows
   getChar = fmap (chr.fromEnum) c_getch
   foreign import ccall unsafe "conio.h getch"
     c_getch :: IO CInt

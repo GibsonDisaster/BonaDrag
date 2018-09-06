@@ -4,9 +4,9 @@ module Utilities where
   scale :: Int
   scale = 1
 
-  createSection :: Spec -> Section
-  createSection sp sec = Section {
-    id = (sId sp)
+  createSection :: Spec a -> Section a
+  createSection sp = Section {
+    name = (sName sp)
   }
 
   outlineFromCorners :: Pos -> Pos -> [Pos]
