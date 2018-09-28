@@ -4,6 +4,12 @@ module Main where
   import Utilities
   import Spacing
 
+  {-
+    NEW TODO LIST
+    [] Get rid of Spec type and just uncurry the fields.
+    [] Fix besideR
+  -}
+
   {- World Section -}
 
   drawWorld :: Section a -> IO ()
@@ -84,5 +90,16 @@ module Main where
     updateSection = updateInventory
   }
 
+  -- New System for creating windows
+
+  window :: Window Int
+  window = Window "New System" sects
+    where
+      sects = [root, statS, dialS, invS]
+      root = createSectionRoot (Spec "World" 10 10 3 drawWorld updateWorld) (0, 0) (10, 10)
+      statS = (createSection (Spec "Stats" 8 2 3 drawStat updateStat) `besideR` root) `leanU` root
+      dialS = createSection (Spec "Dialogue" 8 4 3 drawDialogue updateDialogue) `below` statS
+      invS = createSection (Spec "Inventory" 8 4 3 drawInventory updateDialogue) `below` dialS
+
   main :: IO ()
-  main = runWindow $ Window "Test" [worldSection, statSection, dialogueSection, inventorySection]
+  main = runWindow $ window --Window "Test" [worldSection, statSection, dialogueSection, inventorySection]

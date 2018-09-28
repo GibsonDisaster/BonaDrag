@@ -1,5 +1,6 @@
 module Spacing where
   import Types
+  import Utilities (scale)
   import Data.Bifunctor
 
   {-
@@ -23,7 +24,7 @@ module Spacing where
   -}
 
   below :: Section a -> Section a -> Section a
-  below sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
+  below sec1 sec2 = sec1 { topLeft = (newStartX * scale, newStartY * scale), bottomRight = (newEndX * scale, newEndY * scale) }
     where
       newStartX = (fst . topLeft) sec2
       newStartY = (snd . topLeft) sec2 + height sec2
@@ -31,7 +32,7 @@ module Spacing where
       newEndY = (snd . bottomRight) sec2 + height sec1
 
   above :: Section a -> Section a -> Section a
-  above sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
+  above sec1 sec2 = sec1 { topLeft = (newStartX * scale, newStartY * scale), bottomRight = (newEndX * scale, newEndY * scale) }
     where
       newStartX = (fst . topLeft) sec2
       newStartY = (snd . topLeft) sec2 - height sec1
@@ -40,7 +41,7 @@ module Spacing where
   
   {- MIGHT NOT WORK FIX LATER -}
   besideR :: Section a -> Section a -> Section a
-  besideR sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
+  besideR sec1 sec2 = sec1 { topLeft = (newStartX * scale, newStartY * scale), bottomRight = (newEndX * scale, newEndY * scale) }
     where
       newStartX = (fst . topLeft) sec2 + width sec2
       newStartY = (snd . topLeft) sec2
@@ -48,7 +49,7 @@ module Spacing where
       newEndY = (snd . bottomRight) sec2
 
   besideL :: Section a -> Section a -> Section a
-  besideL sec1 sec2 = sec1 { topLeft = (newStartX, newStartY), bottomRight = (newEndX, newEndY) }
+  besideL sec1 sec2 = sec1 { topLeft = (newStartX * scale, newStartY * scale), bottomRight = (newEndX * scale, newEndY * scale) }
     where
       newStartX = (fst . topLeft) sec2 - width sec1
       newStartY = (snd . topLeft) sec2
@@ -56,28 +57,28 @@ module Spacing where
       newEndY = newStartY + height sec1
 
   belowN :: Section a -> Int -> Section a -> Section a
-  belowN sec1 n sec2 = moveBelow { topLeft = bimap id ((+) n) newStart, bottomRight = bimap id ((+) n) newEnd }
+  belowN sec1 n sec2 = moveBelow { topLeft = bimap ((* scale) . id) ((+) n) newStart, bottomRight = bimap ((* scale) . id) ((+) n) newEnd }
     where
       moveBelow = sec1 `below` sec2
       newStart = topLeft moveBelow
       newEnd = bottomRight moveBelow
 
   aboveN :: Section a -> Int -> Section a -> Section a
-  aboveN sec1 n sec2 = moveAbove { topLeft = bimap id (\y -> y - n) newStart, bottomRight = bimap id (\y -> y - n) newEnd }
+  aboveN sec1 n sec2 = moveAbove { topLeft = bimap ((* scale) . id) (\y -> y - n) newStart, bottomRight = bimap ((* scale) . id) (\y -> y - n) newEnd }
     where
       moveAbove = sec1 `above` sec2
       newStart = topLeft moveAbove
       newEnd = bottomRight moveAbove
 
   besideRN :: Section a -> Int -> Section a -> Section a
-  besideRN sec1 n sec2 = movetoRight { topLeft = bimap ((+) n) id newStart, bottomRight = bimap ((+) n) id newEnd }
+  besideRN sec1 n sec2 = movetoRight { topLeft = bimap ((+) n) ((* scale) . id) newStart, bottomRight = bimap ((+) n) ((* scale) . id) newEnd }
     where
       movetoRight = sec1 `besideR` sec2
       newStart = topLeft movetoRight
       newEnd = bottomRight movetoRight
       
   besideLN :: Section a -> Int -> Section a -> Section a
-  besideLN sec1 n sec2 = movetoLeft { topLeft = bimap (\y -> y - n) id newStart, bottomRight = bimap (\y -> y - n) id newEnd }
+  besideLN sec1 n sec2 = movetoLeft { topLeft = bimap (\y -> y - n) ((* scale) . id) newStart, bottomRight = bimap (\y -> y - n) ((* scale) . id) newEnd }
     where
       movetoLeft = sec1 `besideL` sec2
       newStart = topLeft movetoLeft
@@ -89,25 +90,25 @@ module Spacing where
   -}
 
   leanL :: Section a -> Section a -> Section a
-  leanL sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+  leanL sec1 sec2 = sec1 { topLeft = bimap (* scale) (* scale) newStart, bottomRight = bimap (* scale) (* scale) newEnd }
     where
       newStart = bimap (\x -> x - (width sec2)) id (topLeft sec1)
       newEnd = bimap (\x -> x - (width sec2)) id (bottomRight sec1)
 
   leanR :: Section a -> Section a -> Section a
-  leanR sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+  leanR sec1 sec2 = sec1 { topLeft = bimap (* scale) (* scale) newStart, bottomRight = bimap (* scale) (* scale) newEnd }
     where
       newStart = bimap ((+) (width sec2)) id (topLeft sec1)
       newEnd = bimap ((+) (width sec2)) id (bottomRight sec1)
 
   leanU :: Section a -> Section a -> Section a
-  leanU sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+  leanU sec1 sec2 = sec1 { topLeft = bimap (* scale) (* scale) newStart, bottomRight = bimap (* scale) (* scale) newEnd }
     where
       newStart = bimap id (\x -> x - (width sec2)) (topLeft sec1)
       newEnd = bimap id (\x -> x - (width sec2)) (bottomRight sec1)
 
   leanD :: Section a -> Section a -> Section a
-  leanD sec1 sec2 = sec1 { topLeft = newStart, bottomRight = newEnd }
+  leanD sec1 sec2 = sec1 { topLeft = bimap (* scale) (* scale) newStart, bottomRight = bimap (* scale) (* scale) newEnd }
     where
       newStart = bimap id ((+) (width sec2)) (topLeft sec1)
       newEnd = bimap id ((+) (width sec2)) (bottomRight sec1)
@@ -118,7 +119,7 @@ module Spacing where
   -}
 
   shiftH :: Section a -> Int -> Section a
-  shiftH sec n = sec { topLeft = bimap ((+) n) id (topLeft sec), bottomRight = bimap ((+) n) id (bottomRight sec) }
+  shiftH sec n = sec { topLeft = bimap (* scale) (* scale) (bimap ((+) n) id (topLeft sec)), bottomRight = bimap (* scale) (* scale) (bimap ((+) n) id (bottomRight sec)) }
 
   shiftV :: Section a -> Int -> Section a
-  shiftV sec n = sec { topLeft = bimap id ((+) n) (topLeft sec), bottomRight = bimap id ((+) n) (bottomRight sec) }
+  shiftV sec n = sec { topLeft = bimap (* scale) (* scale) (bimap id ((+) n) (topLeft sec)), bottomRight = bimap (* scale) (* scale) (bimap id ((+) n) (bottomRight sec)) }

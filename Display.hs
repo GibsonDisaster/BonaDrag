@@ -1,7 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module Display(runWindow) where
-  import Prelude hiding (getChar)
+  import Prelude -- hiding (getChar)
   import Foreign.C.Types
   import Data.Char
   import System.Console.ANSI
@@ -16,12 +16,8 @@ module Display(runWindow) where
   4) abstract everything
   5) why do some topLeft bottomRights not matter like when the section isn't a root. CHANGE THIS
   6) way of composing all the sections together into a window
+  7) Let windows have scope (only show part of a larger picture, etc...)
   -}
-
-  -- Only for use with Windows
-  getChar = fmap (chr.fromEnum) c_getch
-  foreign import ccall unsafe "conio.h getch"
-    c_getch :: IO CInt
 
   moveCursor :: (Int, Int) -> IO ()
   moveCursor (x, y) = setCursorPosition y x
@@ -42,3 +38,8 @@ module Display(runWindow) where
     _ <- getChar
     showCursor
     putStr ""
+
+  {- -- Only for use with Windows
+  getChar = fmap (chr.fromEnum) c_getch
+  foreign import ccall unsafe "conio.h getch"
+    c_getch :: IO CInt -}
